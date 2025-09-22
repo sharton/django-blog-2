@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Список постов{% endblock %}
+
+{% block content %}
+      <a href="{% url 'post_list' %}">Все посты</a>
+        <h1>{{post.title}}</h1>
+        <p>{{post.text}}</p>
+{% endblock %}
