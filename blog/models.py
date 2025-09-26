@@ -12,7 +12,7 @@ class Post(models.Model):
     title = models.CharField(max_length=200)
     text = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
