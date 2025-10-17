@@ -11,12 +11,12 @@
     <div class="col-md-4 mb-4">
         <div class="card post-card shadow-sm">
             {% if post.image %}
-                <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+                <img src="{{ post.image.url }}" class="card-img-top animate__animated animate__bounceInLeft" alt="{{ post.title }}">
             {% else %}
-                <img src="{% static 'blog/images/default.jpg' %}" class="card-img-top" alt="default">
+                <img src="{% static 'blog/images/default.jpg' %}" class="card-img-top animate__animated animate__bounceInLeft" alt="default">
             {% endif %}
             <div class="card-body">
-                <h5 class="card-title">{{ post.title }}</h5>
+                <h5 class="card-title animate__animated animate__bounce">{{ post.title }}</h5>
                 <p class="card-text">{{ post.text|truncatechars:120 }}</p>
                 <p class="text-muted small">Автор: {{ post.author }}<br>Дата: {{ post.created_at|date:"d.m.Y" }}</p>
                 <a href="{% url 'post_detail' post.id %}" class="btn btn-primary btn-sm">Читать далее</a>
