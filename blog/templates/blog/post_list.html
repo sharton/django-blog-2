@@ -1,13 +1,31 @@
 {% extends 'blog/base.html' %}
+{% load static %}
 
-{% block title %}Список постов{% endblock %}
+{% block title %}Блог{% endblock %}
 
 {% block content %}
-   {% for post in posts %}
-        <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
-        <p>{{post.text}}</p>
-    {% empty %}
-        <p>Пока постов нет</p>
-   {% endfor %}
+<h1 class="mb-4 text-center">Посты</h1>
 
+<div class="row">
+    {% for post in posts %}
+    <div class="col-md-4 mb-4">
+        <div class="card post-card shadow-sm">
+            {% if post.image %}
+                <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+            {% else %}
+                <!-- <img src="{% static 'blog/images/default.jpg' %}" class="card-img-top" alt="default"> -->
+                 <p>нет изображения</p>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text">{{ post.text|truncatechars:120 }}</p>
+                <p class="text-muted small">Автор: {{ post.author }}<br>Дата: {{ post.created_at|date:"d.m.Y" }}</p>
+                <a href="{% url 'post_detail' post.id %}" class="btn btn-primary btn-sm">Читать далее</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        <p class="text-center">Постов пока нет.</p>
+    {% endfor %}
+</div>
 {% endblock %}

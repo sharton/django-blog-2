@@ -4,6 +4,7 @@
 
 {% block content %}
       <a href="{% url 'post_list' %}">Все посты</a>
+        <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
         <h1>{{post.title}}</h1>
         <p>{{post.text}}</p>
 
