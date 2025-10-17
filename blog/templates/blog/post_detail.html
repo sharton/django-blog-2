@@ -1,11 +1,15 @@
 {% extends 'blog/base.html' %}
+{% load static %}
 
 {% block title %}Список постов{% endblock %}
 
 {% block content %}
       <a href="{% url 'post_list' %}">Все посты</a>
-        <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
-        <h1>{{post.title}}</h1>
+        {% if post.image %}
+          <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+        {% else %}
+          <img src="{% static 'blog/images/default.jpg' %}" class="card-img-top" alt="default">
+        {% endif %}
         <p>{{post.text}}</p>
 
         <hr>
