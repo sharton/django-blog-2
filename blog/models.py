@@ -15,6 +15,13 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_published = models.BooleanField(default=False)
+
+
+    class Meta:
+        permissions = [
+            ("can_view_drafts", "Может смотреть черновики"),
+        ]
 
     def __str__(self):
         return self.title
