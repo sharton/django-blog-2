@@ -1,22 +1,43 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from .models import Post
 from .forms import PostForm
 from django.urls import reverse_lazy
 
-class PostListView(ListView):
+class PostListView( ListView):
     model = Post
     context_object_name = "posts"
 
-class PostDetailView(DetailView):
+    def get_queryset(self):
+        return Post.objects.filter(is_published=True).order_by('-created_at')
+    
+class DraftPostListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = Post
+    template_name = 'blog/draft_list.html'
+    context_object_name = "posts"
+    permission_required = 'blog.can_view_drafts'
+    login_url = '/admin'
+    raise_exception = True
+    
+
+class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
     context_object_name = "post"
+    login_url = '/admin'
 
-class PostUpdateView(UpdateView):
+
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostForm
     success_url = reverse_lazy("post_list")
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author or self.request.user.is_superuser
+
+
 
 class PostCreateView(CreateView):
     model = Post
