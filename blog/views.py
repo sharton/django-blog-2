@@ -6,6 +6,8 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Post
 from .forms import PostForm
 from django.urls import reverse_lazy
+from django.contrib.messages.views import SuccessMessageMixin
+
 
 class PostListView( ListView):
     model = Post
@@ -13,6 +15,7 @@ class PostListView( ListView):
 
     def get_queryset(self):
         return Post.objects.filter(is_published=True).order_by('-created_at')
+    
     
 class DraftPostListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Post
@@ -39,15 +42,16 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user == post.author or self.request.user.is_superuser
 
 
-
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Post
     form_class = PostForm
     success_url = reverse_lazy("post_list")
+    success_message = "Пост успешно добавлен"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+    
     
 class PostDeleteView(DeleteView):
     model = Post
@@ -55,12 +59,13 @@ class PostDeleteView(DeleteView):
     success_url = reverse_lazy('post_list')
 
 
-
-class RegisterView(CreateView):
+class RegisterView(SuccessMessageMixin, CreateView):
     model = User
     form_class = UserCreationForm
     template_name = 'auth/register.html'
     success_url = reverse_lazy("post_list")
+    success_message = "Регистрация прошла успешно! Войдите в аккаунт."
+
 
 
 
