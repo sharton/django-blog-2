@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from .models import Post
 from .forms import PostForm
 from django.urls import reverse_lazy
@@ -52,6 +53,20 @@ class PostDeleteView(DeleteView):
     model = Post
     template_name = 'blog/post_confirm_delete.html'
     success_url = reverse_lazy('post_list')
+
+
+
+class RegisterView(CreateView):
+    model = User
+    form_class = UserCreationForm
+    template_name = 'auth/register.html'
+    success_url = reverse_lazy("post_list")
+
+
+
+
+
+
 
 # def post_list(request):
 #     posts = Post.objects.all()
